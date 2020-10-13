@@ -60,6 +60,7 @@ public:
     BinarySearchTree();
 	void add(Person person);
     Person *find(key k); //nonrecursive search function
+	void display(Person *leaf);
 
     bool isEmpty (void) {return (root == NULL);}; //a quick way to tell if the tree has elements
     string test; //another quick way to debug tree constructor
@@ -142,8 +143,6 @@ void BinarySearchTree::add(Person person, Person *leaf) { // This is the recursi
 	}
 }
 
-
-
 Person *BinarySearchTree::find(key k, Person *leaf){
     if(leaf != NULL){
         if((k.last == leaf->lastName)&&(k.first == leaf->firstName)){
@@ -171,6 +170,15 @@ Person *BinarySearchTree::find(key k, Person *leaf){
 
 Person *BinarySearchTree::find(key k){ //this guy starts so the recursive can go
     return find( k, root); // begin recursive
+}
+
+void BinarySearchTree::display(Person *leaf) {
+	if (leaf != NULL) {
+		display(leaf->left);
+		leaf->printFullName;
+		leaf->printNumber;
+		display(leaf->right);
+	}
 }
 
 //START BOOK
