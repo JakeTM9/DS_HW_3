@@ -4,71 +4,66 @@
 #include <list>
 using namespace std;
 
-//struct key (for the BST)
+//Code Refactored 10/13
+
+//struct key -> used everywhere. Everything has a .k.first and a .k.last
 struct key {  //for bst     
         string first, last;       
     };
     
-//START PERSON (the nodes for the BST)
+//START CLASS PERSON (the nodes for the BST)
 
 class Person {
 public:
-    Person();
-    Person(string a, string b, string c);
-    string printFullName (void) {return (k.first + " " + k.last);}
-    string printNumber (void) {return (number);}
+    //Constructors
+    Person(); // empty constructore
+    Person(string first, string last, string num); //first name last name phone number constructor
 
-    
-    struct key k;
 
-    string number;
+    string printFullName (void) {return (k.first + " " + k.last);} //obvious
+    string printNumber (void) {return (number);} //obvious
 
-    Person *left;
-    Person *right;
+    struct key k; // for p.k.first/last access
+    string number; // for number storage
+
+    //for the BST of People
+    Person *left; //left child
+    Person *right; //right child
     
 };
 
 Person::Person() {
-    k.first = "";
-    k.last = "";
-    number = "";
-
+    k.first, k.last, number = "";
 }
 
-Person::Person(string a, string b, string c){
-    k.first = a;
-    k.last = b;
-    number = c;
-    
+Person::Person(string first, string last, string num){
+    k.first = first;
+    k.last = last;
+    number = num;
 }
 
- /*Person::Person(Person *) { //this is for returning BST searches
-    
-    leaf->k.first;
-}  */
-
-// START BST (THE BST lol)
+// START BST Class
 
 class BinarySearchTree{
 public:
     BinarySearchTree();
-    void insert(struct key k);
-    Person *search(key k);
-    
-    bool treeInit (void) {return (root == NULL);};
-    string test;
+    void insert(struct key k); //nonrecursive insert Function
+    Person *search(key k); //nonrecursive search function
+
+    bool isEmpty (void) {return (root == NULL);}; //a quick way to tell if the tree has elements
+    string test; //another quick way to debug tree constructor
 
 private:
     
-    void insert(struct key k, Person *leaf);
-    Person *search(key k, Person *leaf);
-    Person *root;
+    void insert(struct key k, Person *leaf); //recursive insert Function
+    Person *search(key k, Person *leaf); //recursive search function
+    Person *root; //root of tree
     
 };
 
 BinarySearchTree::BinarySearchTree(){
-    root = NULL;
-    test = "test";
+    root = NULL; //init head NULL
+    test = "test"; //init test prints test 
 }
 
 void BinarySearchTree::insert(struct key k){
@@ -77,8 +72,8 @@ void BinarySearchTree::insert(struct key k){
     }
     else{
         root = new Person();
-        root -> k.first = k.first;
-        root -> k.last = k.last;
+        root -> k = k; //copys key k from input
+
         if (false){
             //insert number here eventually?
         }
@@ -87,16 +82,19 @@ void BinarySearchTree::insert(struct key k){
 }
 
 void BinarySearchTree::insert(struct key k, Person *leaf){ // THis is the recursivley calling insert function that takes place after the public insert function to check if there is even anything in the BST
+    
+    //CASE 1: last < last
     if(k.last < leaf->k.last){ //If what we are inserting is less than the Person we plugged
         if( leaf->left != NULL){ // If key is less than the node and the left child isnt null, recursivley call insert again for the left child
             insert(k, leaf->left);
         }
         else{ // ding ding we got an open spot
-            leaf->left = new Person(k.first,k.last,""); // Creates a Person In the Tree
+            leaf->left = new Person(k.first,k.last,"insert number here"); // Creates a Person In the Tree
             leaf->left->left = NULL; //new Person left Person null
             leaf->left->right = NULL; //new Person rigt Perso null
         }
     }
+    //CASE 2: last > last
     else if(k.last > leaf->k.last){ //If what we are inserting is greater than the Person we plugged
         if( leaf->right != NULL){ // If key is greater than the node and the right child isnt null, recursivley call insert again for the left child
             insert(k, leaf->right);
@@ -107,9 +105,11 @@ void BinarySearchTree::insert(struct key k, Person *leaf){ // THis is the recurs
             leaf->left->right = NULL; //new Person rigt Perso null
         }
     }
+    //CASE3
+    //this is the case of the last names being the same, time to repeat the above code but with first names
     else{
-        //this is the case of the last names being the same, time to repeat the above code but with first names
-
+        
+        //CASE3a
         if(k.first < leaf->k.first){ //If what we are inserting is less than the Person we plugged
             if( leaf->left != NULL){ // If key is less than the node and the left child isnt null, recursivley call insert again for the left child
                 insert(k, leaf->left);
@@ -120,6 +120,7 @@ void BinarySearchTree::insert(struct key k, Person *leaf){ // THis is the recurs
                 leaf->left->right = NULL; //new Person rigt Perso null
             }
         }
+        //CASE3b
         else { 
             if( leaf->right != NULL){ // If key is greater than the node and the right child isnt null, recursivley call insert again for the left child
                 insert(k, leaf->right);
@@ -227,6 +228,8 @@ int main() {
     k.last = p1.k.last;
 
     cout << k.first << endl; // print first name of struct key
+
+    cout << tree.isEmpty() << endl; //tests that insert did a good job (should be 0)
 
     //NEXT TASK -> PRINT THE ENTIRE TREE
 
