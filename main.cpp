@@ -74,7 +74,7 @@ public:
 	void add(Person person);
     Person *find(key k); //nonrecursive search function
 	void display(Person *leaf);
-	void savetree(Person *leaf, string);
+	void savetree(Person *leaf, fstream &myfile);
 	string fullname;
 	string number;
 
@@ -199,24 +199,14 @@ void BinarySearchTree::display(Person *leaf) {
 	}
 }
 
-void BinarySearchTree::savetree(Person *leaf, string filename) {
-	ofstream myfile;
-	myfile.open(filename);
-
+void BinarySearchTree::savetree(Person *leaf, fstream &myfile) {
 	if (myfile.is_open()) {
 		if (leaf != NULL) {
-			savetree(leaf->left, filename);
-			leaf->printFullName();
-			leaf->printNumber();
-			cout << leaf->firstName << endl;
-			savetree(leaf->right, filename);
+			savetree(leaf->left, myfile);
+			myfile << leaf->firstName << " " << leaf->lastName << " " << leaf->number << endl;
+			savetree(leaf->right, myfile);
 		}
-		myfile.close();
 	}
-	else {
-		cout << "Cannot open file" << endl;
-	}
-	
 }
 
 //START BOOK
@@ -240,6 +230,7 @@ public:
 	Book book;
 	void Menu();
 	void ReadPhonebook(string);
+	void SavePhonebook(string);
     void Add(); //add name and number to book given person
     //void Delete(); //delete number given name
     void Find(); // ??
@@ -300,7 +291,6 @@ void UserInterface::ReadPhonebook(string fileinput) {
 	fstream phonebook;
 	string first, last, phonenumber = "";
 
-
 	phonebook.open(fileinput);
 
 	if (phonebook.is_open()) {
@@ -313,7 +303,16 @@ void UserInterface::ReadPhonebook(string fileinput) {
 	else {
 		cout << "Cannot open file" << endl;
 	}
-	book.tree.savetree(book.tree.root, "/Users/Andi/GIT/DS_HW_3/sample.txt");
+	SavePhonebook("a");
+	return;
+}
+
+void UserInterface::SavePhonebook(string fileinput) {
+	fstream myfile;
+	fileinput = "/Users/Andi/GIT/DS_HW_3/sample.txt";
+	myfile.open(fileinput);
+	book.tree.savetree(book.tree.root, myfile);
+	myfile.close();
 	return;
 }
 
