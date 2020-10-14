@@ -1,4 +1,4 @@
-LAST, FIRST, PHONE NUMBER
+LAST, FIRST, NUMBER
 Ketchum, Ash, 90989768
 Ahomas, Joseph, 89280980
 Wardega, Jakob, 0983409830
