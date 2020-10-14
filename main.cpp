@@ -53,6 +53,9 @@ public:
     bool isEmpty (void) {return (root == NULL);}; //a quick way to tell if the tree has elements
     string test; //another quick way to debug tree constructor
 
+    int compare(struct key k1, struct key k2);//compare function given 2 keys
+
+
 private:
     
     void insert(struct key k, Person *leaf); //recursive insert Function
@@ -64,6 +67,38 @@ private:
 BinarySearchTree::BinarySearchTree(){
     root = NULL; //init head NULL
     test = "test"; //init test prints test 
+}
+
+int BinarySearchTree::compare(struct key k1, struct key k2){ 
+    for(int i = 0; i < k1.last.size();i++){
+        if(k1.last.at(i) < k2.last.at(i)){
+            //higher in alph
+            return 0;
+        }
+        else if (k1.last.at(i) < k2.last.at(i)){
+            //lower in alph
+            return 1;
+        }
+    }
+    if(k1.last.size() < k2.last.size()){
+        //higher in alph
+        return 0;
+    }
+    if(k1.last.size() > k2.last.size()){
+        //lower in a
+        return 1;
+    }
+    for(int i = 0; i < k1.last.size();i++){
+        if(k1.first.at(i) < k2.first.at(i)){
+            //higher in alph
+            return 0;
+        }
+        else if (k1.first.at(i) < k2.first.at(i)){
+            //lower in alph
+            return 1;
+        }
+    }
+    return -1;
 }
 
 void BinarySearchTree::insert(struct key k){
