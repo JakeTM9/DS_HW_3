@@ -18,6 +18,7 @@ public:
 	//Constructors
 	Person(); // empty constructore
 	Person(string first, string last, string num); //first name last name phone number constructor
+	Person(Person* p); //constructor of a person given a person
 
 
 	string printFullName(void);//obvious
@@ -71,6 +72,12 @@ Person::Person(string first, string last, string num) {
 	firstName = first;
 	lastName = last;
 	number = num;
+}
+
+Person::Person(Person* p) {
+	firstName = p->firstName;
+	lastName = p->lastName;
+	number = p->number;
 }
 
 // START BST Class
@@ -240,8 +247,8 @@ public:
 	void SavePhonebook(string);
 	void Add(); //add name and number to book given person
 	//void Delete(); //delete number given name
-	void Find(); // ??
-	//void Change(); //change number given name
+	string Find(); // ??
+	void Change(); //change number given name
 	void Display(); //dumps book
 
 private:
@@ -273,7 +280,7 @@ void UserInterface::Menu() {
 			Find();
 			break;
 		case '4':
-			//Change();
+			Change();
 			break;
 		case '5':
 			Display();
@@ -357,7 +364,7 @@ void UserInterface::Add() {
 
 }
 
-void UserInterface::Find() {
+string UserInterface::Find() {
 	string first;
 	string last;
 	cout << "What is the first name of the person you would like to add?\n";
@@ -368,7 +375,28 @@ void UserInterface::Find() {
 	struct key key;
 	key.first = first;
 	key.last = last;
-	book.tree.find(key); // returns person. not sure what to do.
+	
+	if (book.tree.find(key) == NULL) {
+		cout << "No such person exists" << endl;
+		return "No such person exists";
+	}
+	else {
+		Person p = book.tree.find(key); // returns person. not sure what to do.
+		cout << first << " " << last << "'s number is: " << p.number << endl;
+		return p.number;
+	}
+	cout << "somethin went wrong" << endl;
+	
+
+}
+
+void UserInterface::Change() {
+	string first;
+	string last;
+	cout << "What is the first name of the person for the phone number you would like to change?\n";
+	cin >> first;
+	cout << "What is the last name of the person for the phone number you would like to change?\n";
+	cin >> last;
 }
 
 void UserInterface::Display() {
