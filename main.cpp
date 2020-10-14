@@ -18,7 +18,7 @@ public:
 	//Constructors
 	Person(); // empty constructore
 	Person(string first, string last, string num); //first name last name phone number constructor
-	
+
 
 
 	string printFullName(void);//obvious
@@ -325,14 +325,14 @@ void UserInterface::ReadPhonebook(string fileinput) {
 	return;
 }
 
-vvoid UserInterface::SavePhonebook(string fileinput) {
+void UserInterface::SavePhonebook(string fileinput) {
 	fstream myfile;
 	myfile.open(fileinput, fstream::out);
 	if (myfile.is_open()) {
 		myfile << "LAST, FIRST, PHONE NUMBER\n";
 		book.tree.savetree(book.tree.root, myfile);
 		myfile.close();
-	} 
+	}
 
 	else {
 		cout << "Could not open file" << endl;
@@ -400,18 +400,18 @@ void UserInterface::Find() {
 	struct key key;
 	key.first = first;
 	key.last = last;
-	
+
 	if (book.tree.find(key) == NULL) {
 		cout << "No such person exists" << endl;
-		
+
 	}
 	else {
-		Person *p = book.tree.find(key);
-		cout << first << " " << last << "'s number is: " << p ->number << endl;
-		
+		Person* p = book.tree.find(key);
+		cout << first << " " << last << "'s number is: " << p->number << endl;
+
 	}
-	
-	
+
+
 
 }
 
@@ -432,23 +432,23 @@ void UserInterface::Change() {
 
 	if (book.tree.find(key) == NULL) {
 		cout << "No such person exists" << endl;
-		
+
 	}
 	else {
 		Person* p = book.tree.find(key);
 		string oldNumber = p->number;
 		p->number = newNumber;
-		cout << first << " " << last << "'s number has been changed FROM: " << oldNumber<< " TO: " << p->number << endl;
-		
+		cout << first << " " << last << "'s number has been changed FROM: " << oldNumber << " TO: " << p->number << endl;
+
 	}
 	cout << "somethin went wrong" << endl;
 
 
-	
+
 }
 
 void UserInterface::Display() {
-	cout<< "Displaying Full Book:" << endl;
+	cout << "Displaying Full Book:" << endl;
 	if (book.tree.root != NULL) {
 		book.tree.display(book.tree.root);
 	}
