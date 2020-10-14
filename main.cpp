@@ -305,13 +305,16 @@ void UserInterface::Menu() {
 void UserInterface::ReadPhonebook(string fileinput) {
 	fstream phonebook;
 	string first, last, phonenumber = "";
-
 	phonebook.open(fileinput);
 
 	if (phonebook.is_open()) {
-		while (phonebook >> first >> last >> phonenumber) {
-			Person person = Person(first, last, phonenumber);
-			book.tree.add(person);
+		while (phonebook >> last >> first >> phonenumber) {
+			if (last.find("LAST") == string::npos) { //Ignore entry if it is the identifier made by this program
+				last.erase(remove(last.begin(), last.end(), ','), last.end());
+				first.erase(remove(first.begin(), first.end(), ','), first.end());
+				Person person = Person(first, last, phonenumber);
+				book.tree.add(person);
+			}
 		}
 		cout << "Data imported from " << fileinput << endl;
 		phonebook.close();
@@ -322,13 +325,15 @@ void UserInterface::ReadPhonebook(string fileinput) {
 	return;
 }
 
-void UserInterface::SavePhonebook(string fileinput) {
+vvoid UserInterface::SavePhonebook(string fileinput) {
 	fstream myfile;
 	myfile.open(fileinput, fstream::out);
 	if (myfile.is_open()) {
+		myfile << "LAST, FIRST, PHONE NUMBER\n";
 		book.tree.savetree(book.tree.root, myfile);
 		myfile.close();
-	}
+	} 
+
 	else {
 		cout << "Could not open file" << endl;
 	}
