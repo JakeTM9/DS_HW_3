@@ -18,7 +18,7 @@ public:
 	//Constructors
 	Person(); // empty constructore
 	Person(string first, string last, string num); //first name last name phone number constructor
-	Person(Person* p); //constructor of a person given a person
+	
 
 
 	string printFullName(void);//obvious
@@ -74,11 +74,7 @@ Person::Person(string first, string last, string num) {
 	number = num;
 }
 
-Person::Person(Person* p) {
-	firstName = p->firstName;
-	lastName = p->lastName;
-	number = p->number;
-}
+
 
 // START BST Class
 
@@ -381,9 +377,9 @@ string UserInterface::Find() {
 		return "No such person exists";
 	}
 	else {
-		Person p = book.tree.find(key); // returns person. not sure what to do.
-		cout << first << " " << last << "'s number is: " << p.number << endl;
-		return p.number;
+		Person *p = book.tree.find(key); // returns person. not sure what to do.
+		cout << first << " " << last << "'s number is: " << p ->number << endl;
+		return p ->number;
 	}
 	cout << "somethin went wrong" << endl;
 	
