@@ -21,6 +21,7 @@ public:
 	Person(string first, string last, string num); //first name last name phone number constructor
 
 
+
 	string printFullName(void);//obvious
 	string printNumber(void); //obvious
 	string printNameAndNumber(void);
@@ -71,6 +72,8 @@ Person::Person(string first, string last, string num) {
 	lastName = last;
 	number = num;
 }
+
+
 
 // START BST Class
 
@@ -239,9 +242,9 @@ public:
 	void ReadPhonebook(string);
 	void SavePhonebook(string);
 	void Add(); //add name and number to book given person
-	//void Delete(); //delete number given name
+	void Delete(); //delete number given name
 	void Find(); // ??
-	//void Change(); //change number given name
+	void Change(); //change number given name
 	void Display(); //dumps book
 
 private:
@@ -257,9 +260,9 @@ void UserInterface::Menu() {
 
 	//continuous loop to enable multiple uses
 	while (run) {
-		cout << "What would you like to do? \n 1. Add a new entry. \n 2. Delete an entry.\n";
-		cout << "3. Find an entry's number. \n 4. Change an entry's number.\n";
-		cout << "5. Display entire phone book. \n 6. Enter filename and save tree based on file. \n 0. Exit and save.\n";
+		cout << "What would you like to do? \n 1. Add a new entry. \n 2. Delete a phone number.\n";
+		cout << " 3. Find an entry's number. \n 4. Change an entry's number.\n";
+		cout << " 5. Display entire phone book. \n 6. Enter filename and save tree based on file. \n 0. Exit and save.\n";
 		cout << "Enter the number corresponding with your selection: \n";
 		cin >> choice;
 		switch (choice) {
@@ -267,13 +270,13 @@ void UserInterface::Menu() {
 			Add();
 			break;
 		case '2':
-			//Delete();
+			Delete();
 			break;
 		case '3':
 			Find();
 			break;
 		case '4':
-			//Change();
+			Change();
 			break;
 		case '5':
 			Display();
@@ -328,7 +331,7 @@ void UserInterface::SavePhonebook(string fileinput) {
 		myfile << "LAST, FIRST, PHONE NUMBER\n";
 		book.tree.savetree(book.tree.root, myfile);
 		myfile.close();
-	} 
+	}
 
 	else {
 		cout << "Could not open file" << endl;
@@ -361,6 +364,30 @@ void UserInterface::Add() {
 
 }
 
+void UserInterface::Delete() {
+	string first;
+	string last;
+	cout << "What is the first name of the person whose phone number you would like to delete?\n";
+	cin >> first;
+	cout << "What is the last name of the person whose phone number you would like to delete?\n";
+	cin >> last;
+
+	struct key key;
+	key.first = first;
+	key.last = last;
+
+	if (book.tree.find(key) == NULL) {
+		cout << "No such person exists" << endl;
+
+	}
+	else {
+		Person* p = book.tree.find(key);
+		p->number = "";
+		cout << first << " " << last << "'s number has been DELETED" << endl;
+
+	}
+}
+
 void UserInterface::Find() {
 	string first;
 	string last;
@@ -372,11 +399,55 @@ void UserInterface::Find() {
 	struct key key;
 	key.first = first;
 	key.last = last;
-	book.tree.find(key); // returns person. not sure what to do.
+
+	if (book.tree.find(key) == NULL) {
+		cout << "No such person exists" << endl;
+
+	}
+	else {
+		Person* p = book.tree.find(key);
+		cout << first << " " << last << "'s number is: " << p->number << endl;
+
+	}
+
+
+
+}
+
+void UserInterface::Change() {
+	string first;
+	string last;
+	string newNumber;
+	cout << "What is the first name of the person for the phone number you would like to change?\n";
+	cin >> first;
+	cout << "What is the last name of the person for the phone number you would like to change?\n";
+	cin >> last;
+	cout << "Please input the new number\n";
+	cin >> newNumber;
+	struct key key;
+	key.first = first;
+	key.last = last;
+
+
+	if (book.tree.find(key) == NULL) {
+		cout << "No such person exists" << endl;
+
+	}
+	else {
+		Person* p = book.tree.find(key);
+		string oldNumber = p->number;
+		p->number = newNumber;
+		cout << first << " " << last << "'s number has been changed FROM: " << oldNumber << " TO: " << p->number << endl;
+
+	}
+	cout << "somethin went wrong" << endl;
+
+
+
 }
 
 void UserInterface::Display() {
-	cout<< "Displaying Full Book:" << endl;
+	cout << "Displaying Full Book:" << endl;
 	if (book.tree.root != NULL) {
 		book.tree.display(book.tree.root);
 	}
