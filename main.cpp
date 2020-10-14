@@ -256,16 +256,19 @@ void UserInterface::Add() {
 	cout << "What is the last name of the person you would like to add?\n";
 	cin >> last;
 	cout << "What is the phone number of the person you would like to add? Enter without hyphens or spaces. \n";
-	cin >> number;
+	cin.ignore();
+	getline(cin, number, '\n');
 
-	while (number.find("-") == string::npos || number.find(" ") == string::npos)
+	while ((number.find("-") != string::npos) || (number.find(' ') != string::npos))
 	{
 		cout << "Renter without hyphens or spaces. \n";
-		cin >> number;
+		cin.ignore();
+		getline(cin, number, '\n');
 	}
 
 	Person person = Person(first, last, number);
 	book.tree.add(person);
+
 }
 
 void UserInterface::Find() {
@@ -290,6 +293,8 @@ int main() {
     Person p1 = Person("John", "Wick", "2169260202");
 	Person p2 = Person("BB", "Oink", "6138889294");
 	Person p3 = Person("Penelope", "Collins", "9996589364");
+	UserInterface UI;
+	int y = 0;
 
     BinarySearchTree tree = BinarySearchTree(); //declare empty binary search tree    
 	tree.add(p1);
@@ -310,11 +315,8 @@ int main() {
     //the rest of the comments below are useless
 
    // string searchForNumberThroughTreeGivenKey = tree.search(k)->number; // search for his number using the key struct
-   // cout << searchForNumberThroughTreeGivenKey << endl;
-
-    
-    
+   // cout << searchForNumberThroughTreeGivenKey << endl
     
     tree.add(p1); // Inserts a person into the tree
-
+	UI.Menu();
 }
