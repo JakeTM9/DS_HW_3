@@ -243,7 +243,7 @@ public:
 	void SavePhonebook(string);
 	void Add(); //add name and number to book given person
 	//void Delete(); //delete number given name
-	string Find(); // ??
+	void Find(); // ??
 	void Change(); //change number given name
 	void Display(); //dumps book
 
@@ -360,7 +360,7 @@ void UserInterface::Add() {
 
 }
 
-string UserInterface::Find() {
+void UserInterface::Find() {
 	string first;
 	string last;
 	cout << "What is the first name of the person you would like to add?\n";
@@ -374,14 +374,14 @@ string UserInterface::Find() {
 	
 	if (book.tree.find(key) == NULL) {
 		cout << "No such person exists" << endl;
-		return "No such person exists";
+		
 	}
 	else {
-		Person *p = book.tree.find(key); // returns person. not sure what to do.
+		Person *p = book.tree.find(key);
 		cout << first << " " << last << "'s number is: " << p ->number << endl;
-		return p ->number;
+		
 	}
-	cout << "somethin went wrong" << endl;
+	
 	
 
 }
@@ -389,10 +389,33 @@ string UserInterface::Find() {
 void UserInterface::Change() {
 	string first;
 	string last;
+	string newNumber;
 	cout << "What is the first name of the person for the phone number you would like to change?\n";
 	cin >> first;
 	cout << "What is the last name of the person for the phone number you would like to change?\n";
 	cin >> last;
+	cout << "Please input the new number\n";
+	cin >> newNumber;
+	struct key key;
+	key.first = first;
+	key.last = last;
+
+
+	if (book.tree.find(key) == NULL) {
+		cout << "No such person exists" << endl;
+		
+	}
+	else {
+		Person* p = book.tree.find(key);
+		string oldNumber = p->number;
+		p->number = newNumber;
+		cout << first << " " << last << "'s number has been changed from: " << oldNumber<< " to: " << p->number << endl;
+		
+	}
+	cout << "somethin went wrong" << endl;
+
+
+	
 }
 
 void UserInterface::Display() {
