@@ -272,12 +272,16 @@ void UserInterface::Menu(){
 			//Display();
 			break;
 		case '7':
-			cout << "Enter filename:" << endl;
+			cout << "Enter filename: ";
 			cin >> fileinput;
-			fileinput = "/Users/Andi/GIT/DS_HW_3/phonebook.txt"; //DELETE
+	//		fileinput = "/Users/Andi/GIT/DS_HW_3/phonebook.txt"; //DELETE
 			ReadPhonebook(fileinput);
 			break;
 		case '0':
+			cout << "Enter filename to save current data: ";
+			cin >> fileinput;
+	//		fileinput = "/Users/Andi/GIT/DS_HW_3/mydata.txt"; //DELETE
+			SavePhonebook(fileinput);
 			run = false;
 			break;
 		default:
@@ -285,6 +289,7 @@ void UserInterface::Menu(){
 			break;
 		}
 	}
+
 }
 
 void UserInterface::ReadPhonebook(string fileinput) {
@@ -298,21 +303,26 @@ void UserInterface::ReadPhonebook(string fileinput) {
 			Person person = Person(first, last, phonenumber);
 			book.tree.add(person);
 		}
+		cout << "Data imported from " << fileinput << endl;
 		phonebook.close();
 	}
 	else {
 		cout << "Cannot open file" << endl;
 	}
-	SavePhonebook("a");
 	return;
 }
 
 void UserInterface::SavePhonebook(string fileinput) {
 	fstream myfile;
-	fileinput = "/Users/Andi/GIT/DS_HW_3/sample.txt";
-	myfile.open(fileinput);
-	book.tree.savetree(book.tree.root, myfile);
-	myfile.close();
+	myfile.open(fileinput, fstream::out);
+	if (myfile.is_open()) {
+		book.tree.savetree(book.tree.root, myfile);
+		myfile.close();
+	} 
+	else {
+		cout << "Could not open file" << endl;
+	}
+	cout << "Data saved to " << fileinput << endl;
 	return;
 }
 
@@ -361,32 +371,8 @@ void UserInterface::Find() {
 int main() {
 	UserInterface UI;
 	UI.Menu();
- /*   Person p1 = Person("John", "Wick", "2169260202");
-	Person p2 = Person("BB", "Oink", "6138889294");
-	Person p3 = Person("Penelope", "Collins", "9996589364");
-	int y = 0;
-
-    BinarySearchTree tree = BinarySearchTree(); //declare empty binary search tree    
-	tree.add(p1);
-	tree.add(p2);
-	tree.add(p3);
-
-    struct key k;  //making a dummy struct to search for John Wick
-	k.first = p1.firstName;
-	k.last = p1.lastName;
-
-    cout << tree.isEmpty() << endl; //tests that insert did a good job (should be 0)
-
-    //NEXT TASK -> PRINT THE ENTIRE TREE
-
-	tree.find(k)->printFullName(); // this is here to show you that search is still a bit of a WIP-> may change slightly based on technique for printing tree
-	tree.find(k)->printNumber();
-
-    //the rest of the comments below are useless
-
-   // string searchForNumberThroughTreeGivenKey = tree.search(k)->number; // search for his number using the key struct
-   // cout << searchForNumberThroughTreeGivenKey << endl
-    
-    tree.add(p1); // Inserts a person into the tree
-	*/
+	cout << "Done! Press any key to exit...\n";
+	cin.get();
+	cin.ignore();
+	return 0;
 }
