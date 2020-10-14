@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <fstream>
 #include <string>
 #include <list>
@@ -209,7 +210,7 @@ void BinarySearchTree::savetree(Person* leaf, fstream& myfile) {
 	if (myfile.is_open()) {
 		if (leaf != NULL) {
 			savetree(leaf->left, myfile);
-			myfile << leaf->firstName << " " << leaf->lastName << " " << leaf->number << endl;
+			myfile << leaf->lastName << ", " << leaf->firstName << ", " << leaf->number << endl;
 			savetree(leaf->right, myfile);
 		}
 	}
@@ -278,15 +279,14 @@ void UserInterface::Menu() {
 			Display();
 			break;
 		case '6':
+			cout << "Data must be in format LAST, FIRST, NUMBER. " << endl;
 			cout << "Enter filename: ";
 			cin >> fileinput;
-			//		fileinput = "/Users/Andi/GIT/DS_HW_3/phonebook.txt"; //DELETE
 			ReadPhonebook(fileinput);
 			break;
 		case '0':
 			cout << "Enter filename to save current data: ";
 			cin >> fileinput;
-			//		fileinput = "/Users/Andi/GIT/DS_HW_3/mydata.txt"; //DELETE
 			SavePhonebook(fileinput);
 			run = false;
 			break;
@@ -301,13 +301,16 @@ void UserInterface::Menu() {
 void UserInterface::ReadPhonebook(string fileinput) {
 	fstream phonebook;
 	string first, last, phonenumber = "";
-
 	phonebook.open(fileinput);
 
 	if (phonebook.is_open()) {
-		while (phonebook >> first >> last >> phonenumber) {
-			Person person = Person(first, last, phonenumber);
-			book.tree.add(person);
+		while (phonebook >> last >> first >> phonenumber) {
+			if (last.find("LAST") == string::npos) { //Ignore entry if it is the identifier made by this program
+				last.erase(remove(last.begin(), last.end(), ','), last.end());
+				first.erase(remove(first.begin(), first.end(), ','), first.end());
+				Person person = Person(first, last, phonenumber);
+				book.tree.add(person);
+			}
 		}
 		cout << "Data imported from " << fileinput << endl;
 		phonebook.close();
@@ -322,6 +325,7 @@ void UserInterface::SavePhonebook(string fileinput) {
 	fstream myfile;
 	myfile.open(fileinput, fstream::out);
 	if (myfile.is_open()) {
+		myfile << "LAST, FIRST, PHONE NUMBER\n";
 		book.tree.savetree(book.tree.root, myfile);
 		myfile.close();
 	} 

@@ -1,15 +1,17 @@
-Sam Heyl 98908968679
-Joe Thomas 6693946603
-Jakob Wardega 0983409830
-Andi Thomas 9380948020
-Joseph Ahomas 89280980
-Randy Peterson 222222222
-Brandon Peecook 89099809808
-Kevin Kiefer 098978979
-Andrew Brand 09834203809
-Benjamin Saalman 0980808009
-Stephen PHD 908089080
-Ash Ketchum 90989768
-Din Djarin 123423445
-Vandi Patel 0983974379
-Aurora Ansari 9834987295
+LAST, FIRST, PHONE NUMBER
+Ketchum, Ash, 90989768
+Ahomas, Joseph, 89280980
+Wardega, Jakob, 0983409830
+Saalman, Benjamin, 0980808009
+Peterson, Randy, 222222222
+Brand, Andrew, 09834203809
+Djarin, Din, 123423445
+Heyl, Sam, 98908968679
+Thomas, Andi, 9380948020
+Peecook, Brandon, 89099809808
+Kiefer, Kevin, 098978979
+Ansari, Aurora, 9834987295
+Patel, Vandi, 0983974379
+Thomas, Joe, 6693946603
+PHD, Stephen, 908089080
+
