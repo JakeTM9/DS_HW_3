@@ -8,34 +8,33 @@ using namespace std;
 
 //struct key -> used everywhere. Everything has a .k.first and a .k.last
 struct key {  //for bst     
-        string first, last;       
-    };
-    
+	string first, last;
+};
+
 //START CLASS PERSON (the nodes for the BST)
 
 class Person {
 public:
-    //Constructors
-    Person(); // empty constructore
-    Person(string first, string last, string num); //first name last name phone number constructor
+	//Constructors
+	Person(); // empty constructore
+	Person(string first, string last, string num); //first name last name phone number constructor
 
 
-    string printFullName(void);//obvious
+	string printFullName(void);//obvious
 	string printNumber(void); //obvious
+	string printNameAndNumber(void);
 
 	string saveFullName(void);
 	string saveNumber(void);
 
 	string firstName;
 	string lastName;
+	string number; // for number storage
 
-    string number; // for number storage
 
-
-    //for the BST of People
-    Person *left; //left child
-    Person *right; //right child
-    
+	//for the BST of People
+	Person* left; //left child
+	Person* right; //right child
 };
 
 string Person::saveFullName() {
@@ -56,89 +55,50 @@ string Person::printNumber() {
 	return number;
 }
 
+
+string Person::printNameAndNumber() {
+	cout << "NAME: " << lastName << ", " << firstName << "	NUMBER: " << number << endl;
+	return (firstName + " " + lastName + " " + number);
+}
+
 Person::Person() {
 	firstName, lastName, number = "";
 }
 
-Person::Person(string first, string last, string num){
+Person::Person(string first, string last, string num) {
 	firstName = first;
 	lastName = last;
-    number = num;
+	number = num;
 }
 
 // START BST Class
 
-class BinarySearchTree{
+class BinarySearchTree {
 public:
-    BinarySearchTree();
+	BinarySearchTree();
 	void add(Person person);
-    Person *find(key k); //nonrecursive search function
-	void display(Person *leaf);
-	void savetree(Person *leaf, fstream &myfile);
+	Person* find(key k); //nonrecursive search function
+	void display(Person* leaf);
+	void savetree(Person* leaf, fstream& myfile);
 	string fullname;
 	string number;
 
-    bool isEmpty (void) {return (root == NULL);}; //a quick way to tell if the tree has elements
-    string test; //another quick way to debug tree constructor
-	Person *root; //root of tree
-
-    int compare(struct key k1, struct key k2);//compare function given 2 keys
-
+	bool isEmpty(void) { return (root == NULL); }; //a quick way to tell if the tree has elements
+	string test; //another quick way to debug tree constructor
+	Person* root; //root of tree
 
 private:
 
-	void add(Person person, Person *leaf); // recursive add function
-    Person *find(key k, Person *leaf); //recursive search function
-    
+	void add(Person person, Person* leaf); // recursive add function
+	Person* find(key k, Person* leaf); //recursive search function
+
 };
 
-BinarySearchTree::BinarySearchTree(){
-    root = NULL; //init head NULL
-    test = "test"; //init test prints test 
+BinarySearchTree::BinarySearchTree() {
+	root = NULL; //init head NULL
+	test = "test"; //init test prints test 
 }
 
-<<<<<<< HEAD
-=======
-int BinarySearchTree::compare(struct key k1, struct key k2){ 
-    for(int i = 0; i < k1.last.size();i++){
-        if(k1.last.at(i) < k2.last.at(i)){
-            //higher in alph
-            return 0;
-        }
-        else if (k1.last.at(i) < k2.last.at(i)){
-            //lower in alph
-            return 1;
-        }
-    }
-    if(k1.last.size() < k2.last.size()){
-        //higher in alph
-        return 0;
-    }
-    if(k1.last.size() > k2.last.size()){
-        //lower in a
-        return 1;
-    }
-    for(int i = 0; i < k1.last.size();i++){
-        if(k1.first.at(i) < k2.first.at(i)){
-            //higher in alph
-            return 0;
-        }
-        else if (k1.first.at(i) < k2.first.at(i)){
-            //lower in alph
-            return 1;
-        }
-    }
-    return -1;
-}
-
-void BinarySearchTree::insert(struct key k){
-    if(root != NULL){ // for when theres already a BST -> gonna call recursive
-        insert(k, root);
-    }
-    else{
-        root = new Person();
-        root -> k = k; //copys key k from input
->>>>>>> Jakob
 
 void BinarySearchTree::add(Person person) {
 	if (root != NULL) { // for when theres already a BST -> gonna call recursive
@@ -150,8 +110,7 @@ void BinarySearchTree::add(Person person) {
 	}
 }
 
-void BinarySearchTree::add(Person person, Person *leaf) { // This is the recursively calling insert function that takes place after the public insert function to check if there is even anything in the BST
-
+void BinarySearchTree::add(Person person, Person* leaf) { // This is the recursively calling insert function that takes place after the public insert function to check if there is even anything in the BST
 	//CASE 1: last < last
 	if (person.lastName < leaf->lastName) { //If what we are inserting is less than the Person we plugged
 		if (leaf->left != NULL) { // If key is less than the node and the left child isnt null, recursively call insert again for the left child
@@ -205,46 +164,48 @@ void BinarySearchTree::add(Person person, Person *leaf) { // This is the recursi
 	}
 }
 
-Person *BinarySearchTree::find(key k, Person *leaf){
-    if(leaf != NULL){
-        if((k.last == leaf->lastName)&&(k.first == leaf->firstName)){
-            return leaf; //winner winner
-        }
-        else if(k.last < leaf->lastName){ // if last name is less than the leaf
-            return find(k, leaf->left); // we recursively call search tp the left child
-        }
-        else if(k.last > leaf->lastName){ // if last name is greater than the leaf
-            return find(k, leaf->right); // we recursively call search tp the righ child
-        }
-        else{ // here we go its first name time
-            if(k.first < leaf->firstName){ // if last name is less than the leaf
-                return find(k, leaf->left); // we recursively call search tp the left child
-            }
-            else{
-                 return find(k, leaf->right); // we recursively call search tp the righ child
-            }
-        }
-    }
-    else{
-        return NULL; //oopsie ur name aint in the book cheif
-    }
+
+Person* BinarySearchTree::find(key k, Person* leaf) {
+	if (leaf != NULL) {
+		if ((k.last == leaf->lastName) && (k.first == leaf->firstName)) {
+			return leaf; //winner winner
+		}
+		else if (k.last < leaf->lastName) { // if last name is less than the leaf
+			return find(k, leaf->left); // we recursively call search tp the left child
+		}
+		else if (k.last > leaf->lastName) { // if last name is greater than the leaf
+			return find(k, leaf->right); // we recursively call search tp the righ child
+		}
+		else { // here we go its first name time
+			if (k.first < leaf->firstName) { // if last name is less than the leaf
+				return find(k, leaf->left); // we recursively call search tp the left child
+			}
+			else {
+				return find(k, leaf->right); // we recursively call search tp the righ child
+			}
+		}
+	}
+	else {
+		return NULL; //oopsie ur name aint in the book cheif
+	}
 }
 
 
-Person *BinarySearchTree::find(key k){ //this guy starts so the recursive can go
-    return find( k, root); // begin recursive
+Person* BinarySearchTree::find(key k) { //this guy starts so the recursive can go
+	return find(k, root); // begin recursive
 }
 
-void BinarySearchTree::display(Person *leaf) {
+void BinarySearchTree::display(Person* leaf) { //alphabetical order traversal
 	if (leaf != NULL) {
 		display(leaf->left);
-		leaf->printFullName();
-		leaf->printNumber();
+		cout << "------------------------------------------------------------------" << endl;
+		leaf->printNameAndNumber();
 		display(leaf->right);
 	}
 }
 
-void BinarySearchTree::savetree(Person *leaf, fstream &myfile) {
+
+void BinarySearchTree::savetree(Person* leaf, fstream& myfile) {
 	if (myfile.is_open()) {
 		if (leaf != NULL) {
 			savetree(leaf->left, myfile);
@@ -276,19 +237,19 @@ public:
 	void Menu();
 	void ReadPhonebook(string);
 	void SavePhonebook(string);
-    void Add(); //add name and number to book given person
-    //void Delete(); //delete number given name
-    void Find(); // ??
-    //void Change(); //change number given name
-    //void Display(); //dumps book
+	void Add(); //add name and number to book given person
+	//void Delete(); //delete number given name
+	void Find(); // ??
+	//void Change(); //change number given name
+	void Display(); //dumps book
 
 private:
-    
+
 };
 
 UserInterface::UserInterface() {}
 
-void UserInterface::Menu(){
+void UserInterface::Menu() {
 	bool run = true;
 	char choice;
 	string fileinput;
@@ -296,8 +257,8 @@ void UserInterface::Menu(){
 	//continuous loop to enable multiple uses
 	while (run) {
 		cout << "What would you like to do? \n 1. Add a new entry. \n 2. Delete an entry.\n";
-		cout << "3. Find an entry's number. \n 5. Change an entry's number.\n";
-		cout << "6. Display entire phone book. \n 7. Enter filename and save tree based on file. \n 0. Exit and save.\n";
+		cout << "3. Find an entry's number. \n 4. Change an entry's number.\n";
+		cout << "5. Display entire phone book. \n 6. Enter filename and save tree based on file. \n 0. Exit and save.\n";
 		cout << "Enter the number corresponding with your selection: \n";
 		cin >> choice;
 		switch (choice) {
@@ -314,18 +275,18 @@ void UserInterface::Menu(){
 			//Change();
 			break;
 		case '5':
-			//Display();
+			Display();
 			break;
-		case '7':
+		case '6':
 			cout << "Enter filename: ";
 			cin >> fileinput;
-	//		fileinput = "/Users/Andi/GIT/DS_HW_3/phonebook.txt"; //DELETE
+			//		fileinput = "/Users/Andi/GIT/DS_HW_3/phonebook.txt"; //DELETE
 			ReadPhonebook(fileinput);
 			break;
 		case '0':
 			cout << "Enter filename to save current data: ";
 			cin >> fileinput;
-	//		fileinput = "/Users/Andi/GIT/DS_HW_3/mydata.txt"; //DELETE
+			//		fileinput = "/Users/Andi/GIT/DS_HW_3/mydata.txt"; //DELETE
 			SavePhonebook(fileinput);
 			run = false;
 			break;
@@ -364,6 +325,7 @@ void UserInterface::SavePhonebook(string fileinput) {
 		book.tree.savetree(book.tree.root, myfile);
 		myfile.close();
 	} 
+
 	else {
 		cout << "Could not open file" << endl;
 	}
@@ -409,6 +371,13 @@ void UserInterface::Find() {
 	book.tree.find(key); // returns person. not sure what to do.
 }
 
+void UserInterface::Display() {
+	cout<< "Displaying Full Book:" << endl;
+	if (book.tree.root != NULL) {
+		book.tree.display(book.tree.root);
+	}
+	cout << "------------------------------------------------------------------" << endl;
+}
 // END UI
 
 //START MAIN
