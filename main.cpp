@@ -23,16 +23,28 @@ public:
     string printFullName(void);//obvious
 	string printNumber(void); //obvious
 
+	string saveFullName(void);
+	string saveNumber(void);
+
 	string firstName;
 	string lastName;
 
     string number; // for number storage
+
 
     //for the BST of People
     Person *left; //left child
     Person *right; //right child
     
 };
+
+string Person::saveFullName() {
+	return (firstName + " " + lastName + " ");
+}
+
+string Person::saveNumber() {
+	return number;
+}
 
 string Person::printFullName() {
 	cout << lastName << ", " << firstName << "\n";
@@ -62,15 +74,18 @@ public:
 	void add(Person person);
     Person *find(key k); //nonrecursive search function
 	void display(Person *leaf);
+	void savetree(Person *leaf, string);
+	string fullname;
+	string number;
 
     bool isEmpty (void) {return (root == NULL);}; //a quick way to tell if the tree has elements
     string test; //another quick way to debug tree constructor
+	Person *root; //root of tree
 
 private:
 
 	void add(Person person, Person *leaf); // recursive add function
     Person *find(key k, Person *leaf); //recursive search function
-    Person *root; //root of tree
     
 };
 
@@ -178,10 +193,30 @@ Person *BinarySearchTree::find(key k){ //this guy starts so the recursive can go
 void BinarySearchTree::display(Person *leaf) {
 	if (leaf != NULL) {
 		display(leaf->left);
-		leaf->printFullName;
-		leaf->printNumber;
+		leaf->printFullName();
+		leaf->printNumber();
 		display(leaf->right);
 	}
+}
+
+void BinarySearchTree::savetree(Person *leaf, string filename) {
+	ofstream myfile;
+	myfile.open(filename);
+
+	if (myfile.is_open()) {
+		if (leaf != NULL) {
+			savetree(leaf->left, filename);
+			leaf->printFullName();
+			leaf->printNumber();
+			cout << leaf->firstName << endl;
+			savetree(leaf->right, filename);
+		}
+		myfile.close();
+	}
+	else {
+		cout << "Cannot open file" << endl;
+	}
+	
 }
 
 //START BOOK
@@ -226,8 +261,7 @@ void UserInterface::Menu(){
 	while (run) {
 		cout << "What would you like to do? \n 1. Add a new entry. \n 2. Delete an entry.\n";
 		cout << "3. Find an entry's number. \n 5. Change an entry's number.\n";
-		cout << "6. Display entire phone book. \n 0. Exit and save.\n";
-		// 7. read in a txt file?
+		cout << "6. Display entire phone book. \n 7. Enter filename and save tree based on file. \n 0. Exit and save.\n";
 		cout << "Enter the number corresponding with your selection: \n";
 		cin >> choice;
 		switch (choice) {
@@ -266,6 +300,7 @@ void UserInterface::ReadPhonebook(string fileinput) {
 	fstream phonebook;
 	string first, last, phonenumber = "";
 
+
 	phonebook.open(fileinput);
 
 	if (phonebook.is_open()) {
@@ -278,6 +313,7 @@ void UserInterface::ReadPhonebook(string fileinput) {
 	else {
 		cout << "Cannot open file" << endl;
 	}
+	book.tree.savetree(book.tree.root, "/Users/Andi/GIT/DS_HW_3/sample.txt");
 	return;
 }
 
