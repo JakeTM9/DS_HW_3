@@ -197,6 +197,7 @@ public:
 	UserInterface();
 	Book book;
 	void Menu();
+	void ReadPhonebook(string);
     void Add(); //add name and number to book given person
     //void Delete(); //delete number given name
     void Find(); // ??
@@ -212,6 +213,7 @@ UserInterface::UserInterface() {}
 void UserInterface::Menu(){
 	bool run = true;
 	char choice;
+	string fileinput;
 
 	//continuous loop to enable multiple uses
 	while (run) {
@@ -237,6 +239,12 @@ void UserInterface::Menu(){
 		case '5':
 			//Display();
 			break;
+		case '7':
+			cout << "Enter filename:" << endl;
+			cin >> fileinput;
+			fileinput = "/Users/Andi/GIT/DS_HW_3/phonebook.txt"; //DELETE
+			ReadPhonebook(fileinput);
+			break;
 		case '0':
 			run = false;
 			break;
@@ -245,6 +253,25 @@ void UserInterface::Menu(){
 			break;
 		}
 	}
+}
+
+void UserInterface::ReadPhonebook(string fileinput) {
+	fstream phonebook;
+	string first, last, phonenumber = "";
+
+	phonebook.open(fileinput);
+
+	if (phonebook.is_open()) {
+		while (phonebook >> first >> last >> phonenumber) {
+			Person person = Person(first, last, phonenumber);
+			book.tree.add(person);
+		}
+		phonebook.close();
+	}
+	else {
+		cout << "Cannot open file" << endl;
+	}
+	return;
 }
 
 void UserInterface::Add() {
@@ -290,10 +317,11 @@ void UserInterface::Find() {
 //START MAIN
 
 int main() {
-    Person p1 = Person("John", "Wick", "2169260202");
+	UserInterface UI;
+	UI.Menu();
+ /*   Person p1 = Person("John", "Wick", "2169260202");
 	Person p2 = Person("BB", "Oink", "6138889294");
 	Person p3 = Person("Penelope", "Collins", "9996589364");
-	UserInterface UI;
 	int y = 0;
 
     BinarySearchTree tree = BinarySearchTree(); //declare empty binary search tree    
@@ -318,5 +346,5 @@ int main() {
    // cout << searchForNumberThroughTreeGivenKey << endl
     
     tree.add(p1); // Inserts a person into the tree
-	UI.Menu();
+	*/
 }
