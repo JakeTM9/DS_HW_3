@@ -441,7 +441,7 @@ void UserInterface::Change() {
 		cout << first << " " << last << "'s number has been changed FROM: " << oldNumber << " TO: " << p->number << endl;
 
 	}
-	cout << "somethin went wrong" << endl;
+	
 
 
 
