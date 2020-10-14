@@ -210,11 +210,11 @@ void BinarySearchTree::display(Person* leaf) { //alphabetical order traversal
 
 
 void BinarySearchTree::savetree(Person* leaf, fstream& myfile) {
-	if (myfile.is_open()) {
-		if (leaf != NULL) {
-			savetree(leaf->left, myfile);
-			myfile << leaf->lastName << ", " << leaf->firstName << ", " << leaf->number << endl;
-			savetree(leaf->right, myfile);
+	if (myfile.is_open()) { //if file is open (it was opened earlier)
+		if (leaf != NULL) { //if the tree has not completely been searched, perform inorder search
+			savetree(leaf->left, myfile); //recursive call
+			myfile << leaf->lastName << ", " << leaf->firstName << ", " << leaf->number << endl; //print data in format LAST, FIRST, NUMBER
+			savetree(leaf->right, myfile); //recursive call
 		}
 	}
 }
@@ -282,16 +282,16 @@ void UserInterface::Menu() {
 			Display();
 			break;
 		case '6':
-			cout << "Data must be in format LAST, FIRST, NUMBER. " << endl;
-			cout << "Enter filename: ";
+			cout << "Data must be in format LAST, FIRST, NUMBER. " << endl; //let user know how data will be read in as
+			cout << "Enter filename: "; //enter filename for data to be read 
 			cin >> fileinput;
-			ReadPhonebook(fileinput);
+			ReadPhonebook(fileinput); //read in data
 			break;
 		case '0':
-			cout << "Enter filename to save current data: ";
+			cout << "Enter filename to save current data: "; //enter file to save all data
 			cin >> fileinput;
-			SavePhonebook(fileinput);
-			run = false;
+			SavePhonebook(fileinput); //call function 
+			run = false; //break loop
 			break;
 		default:
 			cout << "Please enter a valid choice. \n";
@@ -302,42 +302,43 @@ void UserInterface::Menu() {
 }
 
 void UserInterface::ReadPhonebook(string fileinput) {
+	// variable declarations
 	fstream phonebook;
 	string first, last, phonenumber = "";
-	phonebook.open(fileinput);
 
-	if (phonebook.is_open()) {
-		while (phonebook >> last >> first >> phonenumber) {
+	phonebook.open(fileinput); //open file
+
+	if (phonebook.is_open()) { //while the file is open
+		while (phonebook >> last >> first >> phonenumber) { //read in the last, first and phonenumber provided in txt
 			if (last.find("LAST") == string::npos) { //Ignore entry if it is the identifier made by this program
-				last.erase(remove(last.begin(), last.end(), ','), last.end());
-				first.erase(remove(first.begin(), first.end(), ','), first.end());
-				Person person = Person(first, last, phonenumber);
-				book.tree.add(person);
+				last.erase(remove(last.begin(), last.end(), ','), last.end()); //delete any commas in last
+				first.erase(remove(first.begin(), first.end(), ','), first.end()); //delete any commas in first
+				Person person = Person(first, last, phonenumber); //make a new person based on the input data
+				book.tree.add(person); //add person to the book tree
 			}
 		}
-		cout << "Data imported from " << fileinput << endl;
-		phonebook.close();
+		cout << "Data imported from " << fileinput << endl; //print message stating where the information is from 
+		phonebook.close(); //close file
 	}
 	else {
-		cout << "Cannot open file" << endl;
+		cout << "Cannot open file" << endl; //print if the file provided by user cannot be opened
 	}
-	return;
+	return; //return
 }
 
 void UserInterface::SavePhonebook(string fileinput) {
-	fstream myfile;
-	myfile.open(fileinput, fstream::out);
-	if (myfile.is_open()) {
-		myfile << "LAST, FIRST, PHONE NUMBER\n";
-		book.tree.savetree(book.tree.root, myfile);
-		myfile.close();
+	fstream myfile; //variable declaration 
+	myfile.open(fileinput, fstream::out); //open file to read data out
+	if (myfile.is_open()) { //while the file is open
+		myfile << "LAST, FIRST, NUMBER\n"; //print the header provided helpful information to user 
+		book.tree.savetree(book.tree.root, myfile); //go to function used to save data
+		myfile.close(); //close file 
+		cout << "Data saved to " << fileinput << endl; //print where data was saved
 	}
-
-	else {
+	else { //if could not open file, print message
 		cout << "Could not open file" << endl;
 	}
-	cout << "Data saved to " << fileinput << endl;
-	return;
+	return; //return
 }
 
 void UserInterface::Add() {
